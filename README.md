@@ -56,7 +56,7 @@ python app/app.py        # open http://127.0.0.1:5000
 Python, pandas, NumPy, scikit-learn, matplotlib, seaborn, Flask.
 
 ## Team members
-(add names) - Francis Xavier Engineering College, AI & Data Science.
+(POOJITHA K, PREETHI K) - Francis Xavier Engineering College, AI & Data Science.
 
 ## Future enhancements
 Real collected dataset, XGBoost and a TensorFlow network with dropout/batch-norm, reinforcement-learning tutor that adapts the plan week by week, login and progress history.
