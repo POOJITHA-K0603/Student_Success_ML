@@ -1,0 +1,20 @@
+{
+  "hours": {
+    "maths": 1.3,
+    "programming": 5.1,
+    "databases": 3.7,
+    "ml_basics": 1.3,
+    "communication": 2.7
+  },
+  "new_mastery": {
+    "maths": 63.7,
+    "programming": 74.0,
+    "databases": 65.3,
+    "ml_basics": 63.3,
+    "communication": 63.3
+  },
+  "success_now": 0.00120239080761146,
+  "success_ga": 0.005173486989257194,
+  "success_equal_split": 0.004114519776733357,
+  "success_weakest_two": 0.0020261554418950604
+}

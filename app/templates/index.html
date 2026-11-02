@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Success Advisor</title>
+<style>
+:root{--bg:#f6f8fb;--ink:#14213d;--mut:#5b6b82;--card:#fff;--line:#d9e1ec;--acc:#0b6e99;--bad:#b3261e;--ok:#1b7f4b}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1824;--ink:#e8eef7;--mut:#9fb0c6;--card:#172334;--line:#2a3a50;--acc:#4fb3de;--bad:#ff8a80;--ok:#6fdc9f}}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 Georgia,serif;background:var(--bg);color:var(--ink)}
+main{max-width:760px;margin:auto;padding:20px 16px 48px}h1{font-size:1.8rem;line-height:1.2}h2{font-size:1.1rem;margin:20px 0 6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-top:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px}@media(max-width:560px){.grid{grid-template-columns:1fr}}
+label{display:flex;justify-content:space-between;font:.85rem system-ui,sans-serif;margin-top:10px}
+input[type=range]{width:100%;accent-color:var(--acc)}
+button{margin-top:18px;width:100%;padding:12px;border:0;border-radius:8px;background:var(--acc);color:#fff;font:600 1rem system-ui,sans-serif;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.big{font:700 1.6rem system-ui,sans-serif}.bar{height:8px;background:var(--line);border-radius:4px;margin:3px 0 8px;overflow:hidden}.bar i{display:block;height:100%;background:var(--acc)}
+table{width:100%;border-collapse:collapse;font:.9rem system-ui,sans-serif}td,th{padding:6px;border-bottom:1px solid var(--line);text-align:left}
+small{color:var(--mut)}#res{display:none}
+</style></head><body><main>
+<h1>Student success advisor</h1>
+<p><small>Enter your current habits and topic scores. The system predicts your risk level, identifies your learner group and builds a weekly study plan.</small></p>
+<form id="f" class="card"><div class="grid" id="g"></div><button>Analyse my progress</button></form>
+<section id="res" class="card" aria-live="polite">
+  <div>Predicted level: <span class="big" id="risk"></span></div><div id="probs"></div>
+  <h2>Your learner group</h2><div id="group"></div><ul id="tips"></ul>
+  <h2>Optimised weekly study plan</h2><table id="plan"></table>
+  <p id="gain"></p>
+</section></main>
+<script>
+const F=[["attendance","Attendance (%)",30,100,75,1],["study_hours","Study hours / day",0,9,3,.5],["prev_gpa","Previous GPA (/10)",4,10,7,.1],
+["assignment_score","Assignment score (%)",20,100,65,1],["quiz_score","Quiz score (%)",15,100,60,1],["sleep_hours","Sleep hours / night",4,9.5,7,.5],
+["screen_hours","Non-study screen hours / day",.5,10,4,.5],["participation","Class participation (1-5)",1,5,3,.5],
+["mastery_maths","Maths mastery",5,100,55,1],["mastery_programming","Programming mastery",5,100,55,1],["mastery_databases","Databases mastery",5,100,55,1],
+["mastery_ml_basics","ML basics mastery",5,100,55,1],["mastery_communication","Communication mastery",5,100,55,1],["weekly_hours","Weekly study hours available",5,30,14,1]];
+const g=document.getElementById("g");
+g.innerHTML=F.map(([i,l,a,b,v,s])=>`<div><label for="${i}">${l}<b id="v_${i}">${v}</b></label><input type="range" id="${i}" min="${a}" max="${b}" step="${s}" value="${v}"></div>`).join("");
+g.addEventListener("input",e=>document.getElementById("v_"+e.target.id).textContent=e.target.value);
+const nice=t=>t.replace("_"," ");
+document.getElementById("f").addEventListener("submit",async e=>{
+ e.preventDefault();const body={};F.forEach(([i])=>body[i]=+document.getElementById(i).value);
+ const r=await fetch("/api/analyse",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+ const d=await r.json();
+ risk.textContent=d.risk;risk.style.color=d.risk==="At risk"?"var(--bad)":d.risk==="High"?"var(--ok)":"inherit";
+ probs.innerHTML=Object.entries(d.probabilities).map(([k,p])=>`<small>${k}: ${(p*100).toFixed(0)}%</small><div class="bar"><i style="width:${p*100}%"></i></div>`).join("");
+ group.textContent=d.group;tips.innerHTML=d.habit_tips.map(t=>`<li>${t}</li>`).join("");
+ plan.innerHTML="<tr><th>Topic</th><th>Hours / week</th><th>Mastery now</th><th>After plan</th></tr>"+Object.keys(d.plan).map(t=>
+  `<tr><td>${nice(t)}${d.weakest_topics.includes(t)?" <small>(weak)</small>":""}</td><td>${d.plan[t]}</td><td>${d.current_mastery[t]}</td><td>${d.new_mastery[t]}</td></tr>`).join("");
+ gain.innerHTML=`<small>Model-estimated success score: ${d.success_now} now &rarr; ${d.success_plan} with this plan (scale 0-1).</small>`;
+ res.style.display="block";res.scrollIntoView({behavior:"smooth"});});
+</script></body></html>

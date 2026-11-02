@@ -1,0 +1,69 @@
+{
+  "k": 3,
+  "silhouette": 0.26994030182665624,
+  "silhouette_by_k": {
+    "2": 0.34937527849132366,
+    "3": 0.26994030182665624,
+    "4": 0.2277195962857978,
+    "5": 0.20036407962706343,
+    "6": 0.1685896477537914,
+    "7": 0.13548917954432269
+  },
+  "pca_var": [
+    0.6124445906264004,
+    0.12450853659673408
+  ],
+  "profiles": {
+    "0": {
+      "label": "Group 1: strongest in sleep hours, weakest in attendance",
+      "size": 248,
+      "tips": [
+        "Attend more classes (target 85%+).",
+        "Do a short self-quiz every week."
+      ],
+      "centroid": {
+        "attendance": 56.08,
+        "study_hours": 1.21,
+        "sleep_hours": 6.46,
+        "screen_hours": 5.87,
+        "participation": 1.82,
+        "assignment_score": 49.02,
+        "quiz_score": 45.32
+      }
+    },
+    "1": {
+      "label": "Group 2: strongest in attendance, weakest in sleep hours",
+      "size": 543,
+      "tips": [
+        "Sleep 7+ hours; it improves recall.",
+        "Build a daily 2-3 hour study routine."
+      ],
+      "centroid": {
+        "attendance": 77.74,
+        "study_hours": 2.47,
+        "sleep_hours": 6.49,
+        "screen_hours": 3.99,
+        "participation": 3.11,
+        "assignment_score": 68.15,
+        "quiz_score": 64.8
+      }
+    },
+    "2": {
+      "label": "Group 3: strongest in study hours, weakest in sleep hours",
+      "size": 409,
+      "tips": [
+        "Sleep 7+ hours; it improves recall.",
+        "Ask or answer at least one question per class."
+      ],
+      "centroid": {
+        "attendance": 87.52,
+        "study_hours": 4.34,
+        "sleep_hours": 7.34,
+        "screen_hours": 2.59,
+        "participation": 3.8,
+        "assignment_score": 82.45,
+        "quiz_score": 77.76
+      }
+    }
+  }
+}
